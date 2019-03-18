@@ -73,6 +73,12 @@ public class CircleView extends View {
         continueCircleFall = false;
     }
 
+    public void resumeCircleFall() {
+        continueCircleFall = true;
+        CircleFall circleFall = new CircleFall(whiteCircles);
+        circleFall.execute();
+    }
+
     public void createCircleFall() {
         continueCircleFall = true;
         CircleFall circleFall = new CircleFall(whiteCircles);

@@ -51,9 +51,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case R.id.pause_resume:
-                if (stateButton.getText().toString().equals(Constants.PAUSE)) {
+                if (pauseResumeButton.getText().toString().equals(Constants.PAUSE)) {
                     handlePauseState();
-                } else if (stateButton.getText().toString().equals(Constants.RESUME)) {
+                } else if (pauseResumeButton.getText().toString().equals(Constants.RESUME)) {
                     handleResumeState();
                 }
                 break;
@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void handlePlayState() {
         changeStateButtonText(Constants.END);
         circleView.setState(Constants.PLAY);
+        pauseResumeButton.setEnabled(true);
         circleView.createCircleFall();
     }
 
@@ -70,12 +71,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         changeStateButtonText(Constants.NEW);
         circleView.setState(Constants.END);
         circleView.stopCircleFall();
+        pauseResumeButton.setEnabled(false);
+        changePauseButtonState(Constants.PAUSE);
     }
 
     private void handleNewState() {
         changeStateButtonText(Constants.PLAY);
         circleView.setState(Constants.NEW);
         circleView.stopCircleFall();
+        pauseResumeButton.setEnabled(false);
+        changePauseButtonState(Constants.PAUSE);
     }
 
     private void changeStateButtonText(String newState) {
@@ -87,9 +92,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void handleResumeState() {
+        circleView.resumeCircleFall();
+        changePauseButtonState(Constants.PAUSE);
     }
 
     private void handlePauseState() {
+        circleView.stopCircleFall();
+        changePauseButtonState(Constants.RESUME);
     }
 
     @Override
@@ -99,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void updateLives(int lives) {
-        if (lives == 0) {
+        if (lives <= 0) {
             stateButton.setText(Constants.NEW);
             circleView.setState(Constants.NEW);
         }
