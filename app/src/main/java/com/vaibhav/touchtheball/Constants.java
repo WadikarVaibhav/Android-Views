@@ -2,7 +2,7 @@ package com.vaibhav.touchtheball;
 
 public class Constants {
 
-    public static String START_GAME = "START";
+    public static String CREAT_BALLS = "CREATE";
 
     public static String PLAY_GAME = "PLAY";
 
