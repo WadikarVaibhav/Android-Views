@@ -54,7 +54,7 @@ public class CircleView extends View {
             communicator.updateScore(score);
             blackCircle = new BlackCircle(getWidth()/2, (getHeight() - BLACK_CIRCLE_RADIUS), BLACK_CIRCLE_RADIUS);
             invalidate();
-        } 
+        }
         this.state = state;
     }
 
@@ -107,6 +107,9 @@ public class CircleView extends View {
             score++;
             communicator.updateScore(score);
             whiteCircle.setCurrentY(whiteCircle.getRadius());
+            if (whiteCircle.getSpeed() < 10f) {
+                whiteCircle.setSpeed(whiteCircle.getSpeed()*1.25f);
+            }
         }
     }
 
@@ -191,7 +194,7 @@ public class CircleView extends View {
                 try {
                     Thread.sleep(10);
                     for (WhiteCircle whiteCircle: whiteCircles) {
-                        whiteCircle.setCurrentY(whiteCircle.getCurrentY()+2);
+                        whiteCircle.setCurrentY(whiteCircle.getCurrentY()+whiteCircle.getSpeed());
                         publishProgress(whiteCircle.getCurrentY());
                     }
                 } catch (InterruptedException e) {

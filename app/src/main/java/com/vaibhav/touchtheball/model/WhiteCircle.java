@@ -10,6 +10,7 @@ public class WhiteCircle {
     private final float currentX;
     private float radius;
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private float speed;
 
     public WhiteCircle( float currentX, float currentY) {
         this.currentY = currentY;
@@ -18,6 +19,15 @@ public class WhiteCircle {
         this.paint.setColor(Color.BLACK);
         this.paint.setStyle(Paint.Style.STROKE);
         this.paint.setStrokeWidth(CIRCLE_STROKE);
+        this.speed = 2;
+    }
+
+    public float getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(float speed) {
+        this.speed = speed;
     }
 
     public static float getCircleStroke() {
