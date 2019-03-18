@@ -6,7 +6,7 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <com.vaibhav.touchtheball.CircleView
+    <com.vaibhav.touchtheball.view.CircleView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/circleView"
@@ -55,6 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:layout_weight="1"
+            android:text="@string/pause"
             android:background="@drawable/shape"
             android:textColor="@android:color/white"
             android:textStyle="bold" />
@@ -67,6 +68,7 @@
             android:layout_weight="1"
             android:background="@drawable/shape"
             android:textColor="@android:color/white"
+            android:text="@string/state"
             android:textStyle="bold" />
 
         <LinearLayout

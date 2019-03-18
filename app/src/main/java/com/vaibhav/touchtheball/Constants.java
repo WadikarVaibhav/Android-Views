@@ -2,13 +2,13 @@ package com.vaibhav.touchtheball;
 
 public class Constants {
 
-    public static String CREAT_BALLS = "CREATE";
+    public static String NEW = "NEW";
 
-    public static String PLAY_GAME = "PLAY";
+    public static String PLAY = "PLAY";
 
-    public static String END_GAME = "END";
+    public static String END = "END";
 
-    public static String PAUSE_GAME = "PAUSE";
+    public static String PAUSE = "PAUSE";
 
-    public static String RESUME_GAME = "RESUME";
+    public static String RESUME = "RESUME";
 }

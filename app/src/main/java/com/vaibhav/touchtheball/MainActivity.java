@@ -6,80 +6,90 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, Comminicator{
+import com.vaibhav.touchtheball.view.CircleView;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, Communicator {
 
     private Button pauseResumeButton;
-    private Button startEndButton;
+    private Button stateButton;
     private TextView livesText;
     private TextView scoreText;
-    private String state;
-    private int score;
-    private int lives;
     private CircleView circleView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        pauseResumeButton = (Button) findViewById(R.id.pause_resume);
-        startEndButton = (Button) findViewById(R.id.start_end);
-        circleView = (com.vaibhav.touchtheball.CircleView) findViewById(R.id.circleView);
-        livesText = (TextView) findViewById(R.id.lives);
-        scoreText = (TextView) findViewById(R.id.score);
-        pauseResumeButton.setOnClickListener(this);
-        startEndButton.setOnClickListener(this);
-        setup();
+        initResources();
     }
 
-    private void setup() {
-        lives = 3;
-        score = 0;
-        state = Constants.END_GAME;
-        startEndButton.setText(Constants.CREAT_BALLS);
-        pauseResumeButton.setText(Constants.PAUSE_GAME);
+    private void initResources() {
+        pauseResumeButton = (Button) findViewById(R.id.pause_resume);
+        stateButton = (Button) findViewById(R.id.start_end);
+        circleView = (com.vaibhav.touchtheball.view.CircleView) findViewById(R.id.circleView);
+        livesText = (TextView) findViewById(R.id.lives);
+        scoreText = (TextView) findViewById(R.id.score);
+
+        pauseResumeButton.setOnClickListener(this);
+        stateButton.setOnClickListener(this);
+
         pauseResumeButton.setEnabled(false);
-        circleView.setComminicator((Comminicator) this);
+        circleView.setCommunicator((Communicator) this);
+        circleView.setState(Constants.END);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.start_end:
-                if (state == Constants.END_GAME) {
-                    startEndButton.setText(Constants.PLAY_GAME);
-                    state = Constants.CREAT_BALLS;
-                    circleView.setState(Constants.CREAT_BALLS);
-                    circleView.stopFallingCircles();
-                    pauseResumeButton.setEnabled(false);
-                } else if (state == Constants.CREAT_BALLS) {
-                    startEndButton.setText(Constants.END_GAME);
-                    state = Constants.PLAY_GAME;
-                    circleView.setState(Constants.PLAY_GAME);
-                    circleView.startFallingCircles();
-                    pauseResumeButton.setEnabled(true);
-                } else if (state == Constants.PLAY_GAME) {
-                    startEndButton.setText(Constants.CREAT_BALLS);
-                    circleView.stopFallingCircles();
-                    state = Constants.END_GAME;
-                    circleView.setState(Constants.END_GAME);
-                    pauseResumeButton.setEnabled(false);
-                } else if (state == Constants.RESUME_GAME) {
-
+                if (stateButton.getText().toString().equals(Constants.NEW)) {
+                    handleNewState();
+                } else if (stateButton.getText().toString().equals(Constants.PLAY)) {
+                    handlePlayState();
+                } else if (stateButton.getText().toString().equals(Constants.END)) {
+                    handleEndState();
                 }
                 break;
             case R.id.pause_resume:
-                if (state == Constants.PLAY_GAME) {
-                    state = Constants.PAUSE_GAME;
-                    circleView.pauseFallingCircles();
-                    pauseResumeButton.setText("RESUME");
-                } else if (state == Constants.PAUSE_GAME) {
-                    state = Constants.PLAY_GAME;
-                    circleView.startFallingCircles();
-                    pauseResumeButton.setText("PAUSE");
+                if (stateButton.getText().toString().equals(Constants.PAUSE)) {
+                    handlePauseState();
+                } else if (stateButton.getText().toString().equals(Constants.RESUME)) {
+                    handleResumeState();
                 }
-
                 break;
         }
+    }
+
+    private void handlePlayState() {
+        changeStateButtonText(Constants.END);
+        circleView.setState(Constants.PLAY);
+        circleView.createCircleFall();
+    }
+
+    private void handleEndState() {
+        changeStateButtonText(Constants.NEW);
+        circleView.setState(Constants.END);
+        circleView.stopCircleFall();
+    }
+
+    private void handleNewState() {
+        changeStateButtonText(Constants.PLAY);
+        circleView.setState(Constants.NEW);
+        circleView.stopCircleFall();
+    }
+
+    private void changeStateButtonText(String newState) {
+        stateButton.setText(newState);
+    }
+
+    private void changePauseButtonState(String newState) {
+        pauseResumeButton.setText(newState);
+    }
+
+    private void handleResumeState() {
+    }
+
+    private void handlePauseState() {
     }
 
     @Override
@@ -89,6 +99,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void updateLives(int lives) {
+        if (lives == 0) {
+            stateButton.setText(Constants.NEW);
+            circleView.setState(Constants.NEW);
+        }
         livesText.setText(lives+"");
     }
 }
