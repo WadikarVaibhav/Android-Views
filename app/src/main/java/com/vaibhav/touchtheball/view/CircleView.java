@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.os.AsyncTask;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -69,6 +68,7 @@ public class CircleView extends View {
     public void stopCircleFall() {
         continueCircleFall = false;
     }
+
     public void pauseCircleFall() {
         continueCircleFall = false;
     }
@@ -101,10 +101,6 @@ public class CircleView extends View {
             for (WhiteCircle whiteCircle: whiteCircles) {
                 canvas.drawCircle(whiteCircle.getCurrentX(), whiteCircle.getCurrentY(), whiteCircle.getRadius(), whiteCircle.getPaint());
             }
-        } else if (getState().equals(Constants.PAUSE)) {
-
-        } else {
-
         }
     }
 
@@ -156,12 +152,12 @@ public class CircleView extends View {
         if (getState().equals(Constants.NEW)) {
             return createNewCircles(event);
         } else if (getState().equals(Constants.PLAY)) {
-            return moveBlackBall(event);
+            return moveBlackCircle(event);
         }
         return true;
     }
 
-    private boolean moveBlackBall(MotionEvent event) {
+    private boolean moveBlackCircle(MotionEvent event) {
         float touchX = event.getX();
         if (touchX > getWidth()/2) {
             blackCircle.setCurrentX(blackCircle.getCurrentX() + 30);
