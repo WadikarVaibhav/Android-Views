@@ -2,5 +2,5 @@ package com.vaibhav.touchtheball;
 
 public interface Communicator {
     void updateScore(int score);
-    void updateLives(int lives);
+    void updateLives(int lives, int score);
 }

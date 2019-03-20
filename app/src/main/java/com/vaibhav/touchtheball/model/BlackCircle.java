@@ -3,7 +3,10 @@ package com.vaibhav.touchtheball.model;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import com.vaibhav.touchtheball.Constants;
+
 public class BlackCircle {
+
 
     private float currentY;
     private float currentX;
@@ -14,10 +17,10 @@ public class BlackCircle {
         this.currentY = currentY;
     }
 
-    public BlackCircle(float currentX, float currentY, float radius) {
+    public BlackCircle(float currentX, float currentY) {
         this.currentY = currentY;
         this.currentX = currentX;
-        this.radius = radius;
+        this.radius = Constants.BLACK_CIRCLE_RADIUS;
         this.paint.setColor(Color.BLACK);
         this.paint.setStyle(Paint.Style.FILL);
     }

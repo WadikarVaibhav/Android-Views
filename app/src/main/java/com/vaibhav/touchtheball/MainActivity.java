@@ -1,15 +1,20 @@
 package com.vaibhav.touchtheball;
 
+import android.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.content.DialogInterface;
 
 import com.vaibhav.touchtheball.view.CircleView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, Communicator {
 
+    public static final String GAME_OVER_TITLE = "Game Over";
+    public static final String SCORE_MESSAGE = "You Scored ";
+    public static final String START_NEW_GAME_MESSAGE = "Start New";
     private Button pauseResumeButton;
     private Button stateButton;
     private TextView livesText;
@@ -107,11 +112,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void updateLives(int lives) {
+    public void updateLives(int lives, int score) {
         if (lives <= 0) {
+            showPopup(score);
             stateButton.setText(Constants.NEW);
             circleView.setState(Constants.NEW);
+            changePauseButtonState(Constants.PAUSE);
+            pauseResumeButton.setEnabled(false);
         }
         livesText.setText(lives+"");
+    }
+
+    private void showPopup(int score) {
+        new AlertDialog.Builder(MainActivity.this)
+            .setTitle(GAME_OVER_TITLE).setMessage(SCORE_MESSAGE +score)
+            .setNegativeButton(START_NEW_GAME_MESSAGE, null)
+            .show();
     }
 }

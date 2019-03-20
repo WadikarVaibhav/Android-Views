@@ -11,4 +11,6 @@ public class Constants {
     public static String PAUSE = "PAUSE";
 
     public static String RESUME = "RESUME";
+
+    public static final float BLACK_CIRCLE_RADIUS = 80f;
 }

@@ -6,21 +6,34 @@ import android.graphics.Paint;
 public class WhiteCircle {
 
     private static final float CIRCLE_STROKE = 2.0f;
+    public static final int WHITE_BALL_INITIAL_SPEED = 5;
+    public static final int INITIAL_SCORE = 1;
     private float currentY;
     private final float currentX;
     private float radius;
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private float speed;
+    private int score;
 
-    public WhiteCircle( float currentX, float currentY) {
+    public WhiteCircle(float currentX, float currentY) {
         this.currentY = currentY;
         this.currentX = currentX;
         this.radius = 0;
         this.paint.setColor(Color.BLACK);
         this.paint.setStyle(Paint.Style.STROKE);
         this.paint.setStrokeWidth(CIRCLE_STROKE);
-        this.speed = 2;
+        this.speed = WHITE_BALL_INITIAL_SPEED;
+        this.score = INITIAL_SCORE;
     }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
 
     public float getSpeed() {
         return speed;

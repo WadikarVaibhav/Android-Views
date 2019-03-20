@@ -1,6 +1,8 @@
 package com.vaibhav.touchtheball.view;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.os.AsyncTask;
 import android.util.AttributeSet;
@@ -20,7 +22,6 @@ public class CircleView extends View {
     private String state;
     private BlackCircle blackCircle;
     private List<WhiteCircle> whiteCircles;
-    private static final float BLACK_CIRCLE_RADIUS = 40;
     private Communicator communicator;
     private boolean isReleasedTouch = true;
     private boolean continueCircleFall = false;
@@ -34,7 +35,7 @@ public class CircleView extends View {
     public CircleView(Context context, AttributeSet attrs) {
         super(context, attrs);
         whiteCircles = new ArrayList<WhiteCircle>();
-        blackCircle = new BlackCircle(getWidth()/2, (getHeight() - BLACK_CIRCLE_RADIUS), BLACK_CIRCLE_RADIUS);
+        blackCircle = new BlackCircle(getWidth()/2, (getHeight() - Constants.BLACK_CIRCLE_RADIUS));
         setWillNotDraw(false);
         lives = 3;
         score = 0;
@@ -49,9 +50,9 @@ public class CircleView extends View {
             whiteCircles = new ArrayList<>();
             lives = 3;
             score = 0;
-            communicator.updateLives(lives);
+            communicator.updateLives(lives, score);
             communicator.updateScore(score);
-            blackCircle = new BlackCircle(getWidth()/2, (getHeight() - BLACK_CIRCLE_RADIUS), BLACK_CIRCLE_RADIUS);
+            blackCircle = new BlackCircle(getWidth()/2, (getHeight() - Constants.BLACK_CIRCLE_RADIUS));
             invalidate();
         }
         this.state = state;
@@ -61,7 +62,7 @@ public class CircleView extends View {
     public void onWindowFocusChanged(boolean hasWindowFocus) {
         super.onWindowFocusChanged(hasWindowFocus);
         blackCircle.setCurrentX(getWidth()/2);
-        blackCircle.setCurrentY(getHeight() - BLACK_CIRCLE_RADIUS);
+        blackCircle.setCurrentY(getHeight() - Constants.BLACK_CIRCLE_RADIUS);
         invalidate();
     }
 
@@ -106,9 +107,10 @@ public class CircleView extends View {
 
     private void updateScore(WhiteCircle whiteCircle) {
         if (whiteCircle.getCurrentY() - whiteCircle.getRadius() >= getHeight()) {
-            score++;
+            score = score + whiteCircle.getScore();
             communicator.updateScore(score);
             whiteCircle.setCurrentY(whiteCircle.getRadius());
+            whiteCircle.setScore(whiteCircle.getScore()+1);
             if (whiteCircle.getSpeed() < 10f) {
                 whiteCircle.setSpeed(whiteCircle.getSpeed()*1.25f);
             }
@@ -120,7 +122,7 @@ public class CircleView extends View {
                 + Math.pow(whiteCircle.getCurrentY() - blackCircle.getCurrentY(), 2));
         if (whiteCircle.getRadius() + blackCircle.getRadius() >= dist) {
             lives--;
-            communicator.updateLives(lives);
+            communicator.updateLives(lives, score);
             if (lives <= 0) {
                 startNewGame();
             } else {
@@ -132,7 +134,7 @@ public class CircleView extends View {
 
     private void startNewGame() {
         stopCircleFall();
-        blackCircle = new BlackCircle(getWidth()/2, (getHeight() - BLACK_CIRCLE_RADIUS), BLACK_CIRCLE_RADIUS);
+        blackCircle = new BlackCircle(getWidth()/2, (getHeight() - Constants.BLACK_CIRCLE_RADIUS));
     }
 
     @Override
@@ -158,13 +160,24 @@ public class CircleView extends View {
     }
 
     private boolean moveBlackCircle(MotionEvent event) {
-        float touchX = event.getX();
-        if (touchX > getWidth()/2) {
-            blackCircle.setCurrentX(blackCircle.getCurrentX() + 30);
-        } else {
-            blackCircle.setCurrentX(blackCircle.getCurrentX() - 30);
+        float touchedX = event.getX();
+        if (continueCircleFall == true) {
+            if (touchedX > getWidth()/2) {
+                if (blackCircle.getCurrentX() + 30 < getWidth()) {
+                    blackCircle.setCurrentX(blackCircle.getCurrentX() + 30);
+                } else {
+                    blackCircle.setCurrentX(blackCircle.getCurrentX() - 30);
+                }
+            } else {
+                blackCircle.setCurrentX(blackCircle.getCurrentX() - 30);
+                if (blackCircle.getCurrentX() - 30 > 0) {
+                    blackCircle.setCurrentX(blackCircle.getCurrentX() - 30);
+                } else {
+                    blackCircle.setCurrentX(blackCircle.getCurrentX() + 30);
+                }
+            }
+            invalidate();
         }
-        invalidate();
         return true;
     }
 
